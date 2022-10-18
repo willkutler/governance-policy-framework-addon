@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strings"
 
+	watchlib "github.com/stolostron/kubernetes-dependency-watches/client"
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -37,11 +38,31 @@ const (
 
 var log = ctrl.Log.WithName(ControllerName)
 
+var dynamicWatcher watchlib.DynamicWatcher
+
 //+kubebuilder:rbac:groups=policy.open-cluster-management.io,resources=*,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=events,verbs=get;list;watch;create;update;patch;delete
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *PolicyReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	var err error
+	// Create the dynamic watcher.
+	dynamicWatcher, err = watchlib.New(mgr.GetConfig(), &watchReconciler{}, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Start the dynamic watcher in a separate goroutine to not block the main goroutine.
+	go func() {
+		err := dynamicWatcher.Start(context.TODO())
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	// Wait until the dynamic watcher has started.
+	<-dynamicWatcher.Started()
+
 	return ctrl.NewControllerManagedBy(mgr).
 		Named(ControllerName).
 		For(&policiesv1.Policy{}).
@@ -60,6 +81,17 @@ type PolicyReconciler struct {
 	Scheme   *runtime.Scheme
 	Config   *rest.Config
 	Recorder record.EventRecorder
+}
+
+type watchReconciler struct{}
+
+// Reconcile is a generic watcher function that is called on any dependent object when a change to it is made
+func (r *watchReconciler) Reconcile(ctx context.Context, watcher watchlib.ObjectIdentifier) (reconcile.Result, error) {
+	log.Info("An object that this object (%s) was watching was updated\n",
+		watcher.Group+watcher.Version+" "+watcher.Kind+" `"+watcher.Namespace+"."+watcher.Name+"`",
+	)
+
+	return reconcile.Result{}, nil
 }
 
 // Reconcile reads that state of the cluster for a Policy object and makes changes based on the state read
@@ -205,6 +237,30 @@ func (r *PolicyReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 			tLogger.Error(resultError, "Failed to unmarshal the policy template")
 
 			continue
+		}
+
+		// demo - create object identifiers for parent policy and template to pass into the
+		// watch library. We would want to change this to relate to the dependency objects in some way
+		watchedPlc := watchlib.ObjectIdentifier{
+			Group:     "policy.open-cluster-management.io",
+			Version:   "v1",
+			Kind:      "Policy",
+			Namespace: instance.GetNamespace(),
+			Name:      instance.GetName(),
+		}
+
+		watchedTplt := watchlib.ObjectIdentifier{
+			Group:     gvk.Group,
+			Version:   gvk.Version,
+			Kind:      gvk.Kind,
+			Namespace: instance.GetNamespace(),
+			Name:      tName,
+		}
+
+		// Get notified about watchedPlc (parent) when watchedTplt (template) is updated
+		err = dynamicWatcher.AddOrUpdateWatcher(watchedPlc, watchedTplt)
+		if err != nil {
+			panic(err)
 		}
 
 		eObject, err := res.Get(ctx, tName, metav1.GetOptions{})

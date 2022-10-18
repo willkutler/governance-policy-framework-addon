@@ -453,6 +453,8 @@ github.com/spf13/viper v1.8.1/go.mod h1:o0Pch8wJ9BVSWGQMbra6iw0oQ5oktSIBaujf1rJH
 github.com/stoewer/go-strcase v1.2.0/go.mod h1:IBiWB2sKIp3wVVQ3Y035++gc+knqhUQag1KpM8ahLw8=
 github.com/stolostron/go-log-utils v0.1.1 h1:T48GyfuGpn2+6817FQVec1CyxGf0ibuVhoBiz9SeCec=
 github.com/stolostron/go-log-utils v0.1.1/go.mod h1:2Uc5mbuLvSFpoXFFEKRTEFOlR7nqGVMu9mbU+FIttTI=
+github.com/stolostron/kubernetes-dependency-watches v0.0.0-20221007134235-7551d84cf688 h1:Q/0MspxKFkqBN59keMsJI2hGqGGpTSxdNEvrxTOBlRg=
+github.com/stolostron/kubernetes-dependency-watches v0.0.0-20221007134235-7551d84cf688/go.mod h1:jGnjY4g8N1PaBqt35EjqNRjymjG0DWqki/2JOLMN1Pg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
@@ -945,6 +947,8 @@ k8s.io/code-generator v0.23.5/go.mod h1:S0Q1JVA+kSzTI1oUvbKAxZY/DYbA/ZUb4Uknog12
 k8s.io/component-base v0.23.5 h1:8qgP5R6jG1BBSXmRYW+dsmitIrpk8F/fPEvgDenMCCE=
 k8s.io/component-base v0.23.5/go.mod h1:c5Nq44KZyt1aLl0IpHX82fhsn84Sb0jjzwjpcA42bY0=
 k8s.io/gengo v0.0.0-20210813121822-485abfe95c7c/go.mod h1:FiNAH4ZV3gBg2Kwh89tzAEV2be7d5xI0vBa/VySYy3E=
+k8s.io/klog v1.0.0 h1:Pt+yjF5aB1xDSVbau4VsWe+dQNzA0qv1LlXdC2dF6Q8=
+k8s.io/klog v1.0.0/go.mod h1:4Bi6QPql/J/LkTDqv7R/cd3hPo4k2DG6Ptcz060Ez5I=
 k8s.io/klog/v2 v2.0.0/go.mod h1:PBfzABfn139FHAV07az/IF9Wp1bkk3vpT2XSJ76fSDE=
 k8s.io/klog/v2 v2.2.0/go.mod h1:Od+F08eJP+W3HUb4pSrPpgp9DGU4GzlpG/TmITuYh/Y=
 k8s.io/klog/v2 v2.30.0/go.mod h1:y1WjHnz7Dj687irZUWR/WLkLc5N1YHtjLdmgWjndZn0=

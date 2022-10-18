@@ -8,6 +8,7 @@ require (
 	github.com/onsi/gomega v1.20.2
 	github.com/spf13/pflag v1.0.5
 	github.com/stolostron/go-log-utils v0.1.1
+	github.com/stolostron/kubernetes-dependency-watches v0.0.0-20221007134235-7551d84cf688
 	k8s.io/api v0.23.10
 	k8s.io/apimachinery v0.23.10
 	k8s.io/client-go v12.0.0+incompatible
@@ -72,6 +73,7 @@ require (
 	k8s.io/apiextensions-apiserver v0.23.5 // indirect
 	k8s.io/apiserver v0.23.5 // indirect
 	k8s.io/component-base v0.23.5 // indirect
+	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65 // indirect
 	k8s.io/utils v0.0.0-20211116205334-6203023598ed // indirect
 	open-cluster-management.io/api v0.6.1-0.20220208144021-3297cac74dc5 // indirect
